@@ -1,0 +1,435 @@
+\documentclass[8pt,             % 8pt
+               a4paper,         % A4
+               oneside,         % Einseitig
+               DIV20,           % Papiergröße
+             % DIV15,           % Größer
+             % draft,           % Entwurf
+               headsepline,     % Trennlinie oben
+               footsepline,     % -""-       unten
+               smallheadings,   % Kleine Überschriften
+             % pointlessnumbers,% Keine Punkte
+               halfparskip,     % Halbe Zeile Absatz statt Einzug
+               nochapterprefix, % Kein "Kapitel"
+             % bibtotoc         % "Literatur" im TOC  oder
+             % bibtotocnumbered,% -""-, nummeriert
+             % idxtotoc,        % Index im TOC
+               twocolumn
+              ]{scrartcl}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Pakete {{{
+\usepackage[latin1]{inputenc}       % ISO-Umlaute
+\usepackage[T1]{fontenc}            % T1-kodierte Fonts
+\usepackage{ae,aecompl}             % Kodierung für PDF
+%\usepackage{ngerman}                % Deutsche Trennungen,
+                                    % dt. Begriffe
+\usepackage{setspace}               % Single- oder Onehalfspacing
+%\setcounter{tocdepth}{4}            % 4 Hirarchien im Inhaltsv.
+\usepackage{times}                  % Times als Schrift
+\usepackage{amsmath,amssymb,amstext}% Mathematische Symbole
+\usepackage{url}                    % Darstellung von URLs
+\usepackage{calc}
+
+%%% Optional, je nach Dokument
+% \usepackage{listings}             % Quelltext-Listings
+% \usepackage{units}                % Technische Units
+% \usepackage{psfrag}               % Ersetzts PS-Schriften
+% \usepackage{color}                % Farben in LaTeX
+% \usepackage{floatflt}             % Textumflossene Bilder...
+% \usepackage{picins}               % Textumflossene Bilder
+% \usepackage{textcomp}             % Spezielle Zeichen
+% \usepackage[small,compact]{titlesec}             % Überschriften mit wenig Platz
+% \usepackage{gensymb}              % Spezielle Zeichen
+% \usepackage{eurosym}              % Euro-Symbol
+
+%%% Layout
+\usepackage{scrpage2}               % KOMA-Überschriften und -Fußzeilen.
+%%% }}}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% PDF {{{
+\newif\ifpdf
+  \ifx\pdfoutput\undefined
+    \pdffalse
+  \else
+    \pdfoutput=1
+    \pdftrue
+  \fi
+
+\ifpdfoutput{
+  \usepackage[pdftex]{graphicx}
+  \DeclareGraphicsExtensions{.pdf}
+  \pdfcompresslevel=9
+  \usepackage[%
+    pdftex=true,
+    backref=true,
+    colorlinks=true,
+    bookmarks=true,
+    breaklinks=true,
+    linktocpage=true,
+    bookmarksopen=false,
+    bookmarksnumbered=false,
+    pdfpagemode=None
+  ]{hyperref}
+}{
+  \usepackage[dvips]{graphicx}
+  \DeclareGraphicsExtensions{.eps}
+  % \usepackage[%
+  %   dvips,
+  %   breaklinks=true,
+  %   colorlinks=false
+  % ]{hyperref}
+}
+%%% }}}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Eigene Funktionen {{{
+%%% Beispiel:  \bild{200pt}{foo}{That's a foo\ldots}
+\newcommand{\bild}[3]{
+  \begin{figure}
+    \includegraphics[width=#1, keepaspectratio=true]{#2}
+    \caption{#3}
+    \label{#2}
+  \end{figure}
+}
+
+\newcommand{\kbd}[1]{\texttt{#1}}
+\newcommand{\commandlistbegin}{
+  \vspace{3pt}
+  \begin{tabular}{ll}
+}
+\newcommand{\commandlistend}{
+  \end{tabular}
+}
+\newcommand{\command}[2]{
+  \texttt{#1} & \quad #2 \\
+}
+
+%%% }}}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Pagestyle {{{
+  \pagestyle{scrheadings}
+% \pagestyle{fancyhdrs}
+% \pagestyle{empty}
+%%% }}}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Seitenkopf- und -Fußzeilen {{{
+ \automark[subsection*]{section} % \left- und \rightmark bekommen Inhalt
+%%% Oben: Links, Mitte, Rechts
+ \ihead[]{{\Huge GRML-Zsh-Refcard}}
+ \chead[]{}
+ \ohead[]{Revision: Die Feb 06 20:11:16 CET 2007}
+ %\ohead[]{Revision: \today}
+%%% Unten: Links, Mitte, Rechts
+ \ifoot[]{\vspace{-3pt}GRML-Zsh-Refcard}
+ \cfoot[]{}
+ \ofoot[]{\vspace{-3pt}\copyright 2005-2007 \href{mailto:julius@grml.org}{Julius Plenz},
+ \href{mailto:mika@grml.org}{Michael Prokop} and
+ \href{mailto:ft@bewatermyfriend.de}{Frank Terbeck}}
+%%% }}}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Sonstiges {{{
+% \setlength{\parindent}{17pt}      % Einzug 17pt,
+% \setlength{\parskip}{2pt}         % keine Leerzeilen.
+
+% \textwidth      127mm             % Textbreite
+% \textheight     235mm             % Texthöhe
+% \topmargin     -5mm               % Abstand oben
+% \oddsidemargin  7mm               % Abstand Links, onepage
+
+%\onehalfspacing                    % Zeilenabstand: Bei korrektur,
+ \singlespacing                     % bei Abgabe
+
+% Punkt- und Komma Abstände bei Tausendern/
+% Dezimalzahlen ans deutsche anpassen!
+ \mathcode`,="013B
+ \mathcode`.="613A
+
+ \setlength{\emergencystretch}{2em} % Notfallsstreckung
+%%% }}}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\addtolength{\voffset}{10pt}
+\renewcommand{\figurename}{Abb.}
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Titelseite {{{
+%\pagenumbering{none}                % Für die Titelseite: Keine Seitennummern,
+%\thispagestyle{empty}               % keine Kopf- und Fußzeilen.
+%
+%\begin{center}
+%
+%\end{center}
+%\newpage
+%
+%%% }}}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Inhaltsverzeichnis {{{
+  \pagenumbering{arabic}            % Arabische Nummerierung
+% \pagenumbering{roman}             % Kleine, römische Nummerierung
+% \tableofcontents                  % Das Inhaltsverzeichnis
+% \listoffigures                    % Verzeichnis aller Abbildungen
+% \listoftables                     % Verzeichnis aller Tabellen
+% \pagenumbering{arabic}            % ...und wieder Arabisch
+% \newpage
+%%% }}}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% we won't be using math mode much, so redefine some of the characters
+% we might want to talk about
+\catcode`\^=12
+\catcode`\_=12
+
+\chardef\\=`\\
+\chardef\{=`\{
+\chardef\}=`\}
+
+\parskip=0pt
+\setlength{\tabcolsep}{0pt}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Inhalt {{{
+
+%Schon in lhead
+%\section{GRML's Zsh-Setup Reference Card}
+
+\subsection*{Configuration files}
+
+\small{Global zsh configuration is located in \textbf{/etc/zsh/zshrc}.  User
+specific settings are defined in \textbf{/etc/skel/.zshrc} (which can be found
+in \kbd{\~}/.zshrc for user grml too). Please notice that some functions/aliases
+are not active by default for user root (referred to as '... for user (grml)'
+below) because of security reasons. Just run 'zshskel' (as user root) to source
+the file /etc/skel/.zshrc. Some aliases/functions also aren't active if the
+appropriate executable isn't present on your system.
+
+/etc/zsh/zshrc: this file can be adjusted according to your needs via using a
+file named /etc/zsh/zshrc.local which is not part of the Debian package
+management. So place all your changes in the file /etc/zsh/zshrc.local.  If you
+don't have write permissions to /etc/zsh/zshrc on your own, copy the file
+/etc/zsh/zshrc to \kbd{\~}/.zshrc.global and it will be sourced by
+\kbd{\~}/.zshrc then.
+
+Write important commands you always need (no matter what's inside zsh's
+history!) to a file named \textbf{\kbd{\~}/.important\_commands}.
+
+Notice that /etc/skel/.zshrc itself is not sourced by zsh but copied to
+\$HOME-directory of your non-root user once. To keep your
+\textbf{\kbd{\~}/.zshrc} in sync with upstream's development just put your
+personal stuff into a file named \textbf{\kbd{\~}/.zshrc.local} and point your
+\kbd{\~}/.zshrc to /etc/skel/.zshrc running 'ln -s /etc/skel/.zshrc
+\kbd{\~}/.zshrc'.}
+
+You can get information regarding configuration files and some environment
+variables to adjust runtime behaviour of grml's zsh running \textbf{zsh-help}.
+
+\subsection*{Using grml's zsh configuration on a non-grml system}
+
+You do not have to use grml/Debian to use grml's zsh configuration.
+Just retrieve and install the configuration files for example running:
+
+\begin{tiny}
+\begin{verbatim}
+wget -O ~/.zshrc      http://hg.grml.org/grml-etc-core/raw-file/tip/etc/skel/.zshrc
+wget -O ~/.zshrc.global http://hg.grml.org/grml-etc-core/raw-file/tip/etc/zsh/zshrc
+\end{verbatim}
+\end{tiny}
+
+\subsection*{Problems?}
+
+Please report any problems you notice using the grml zsh configuration
+to the grml-team. The configuration has been tested on several Linux
+Distribution (Debian, Gentoo, SuSE,...) and non-Linux systems as well
+(FreeBSD, Solaris, AIX,...) but there might be issues anyway. Please
+\href{http://grml.org/bugs/}{report them}!
+
+\subsection*{Settings}
+
+If not already defined, the variables are set to the following
+values:
+
+\commandlistbegin
+@@INSERT-variables@@
+\commandlistend
+
+\commandlistbegin
+\command{umask @@INSERT-other-umask@@}{new files automatically get permissions \kbd{@@INSERT-other-umaskstr@@}}
+\command{umask @@INSERT-other-r_umask@@}{new files for root user \kbd{@@INSERT-other-r_umaskstr@@}}
+\commandlistend
+
+\subsection*{Key Bindings}
+
+Default keybinding mode is Emacs, i.e. you can use Emacs keybinds like
+\kbd{^A {\rm or} ^E} on the command line. You can however also switch
+to vi mode.
+
+\commandlistbegin
+\command{setopt emacs}{Switch to Emacs mode (default)}
+\command{setopt vi}{Switch to vi mode}
+\commandlistend
+
+\subsection*{Keybindings}
+
+The following keybindings document some important keybindings which are not
+defined by zsh's default configuration. Tip: press <tab> twice when completing a
+command you installed which is not yet known to zsh or run 'rehash' manually.
+
+\commandlistbegin
+@@INSERT-keybindings@@
+\commandlistend
+
+\newpage
+
+\subsection*{Terminal Settings}
+
+There are 8 aliases designed to change the font size of the
+XTerm, Aterm\ldots These are:
+\kbd{hide},
+\kbd{tiny},
+\kbd{small},
+\kbd{medium},
+\kbd{default},
+\kbd{large},
+\kbd{huge},
+\kbd{smartfont},
+\kbd{semifont}.
+
+\subsection*{Hashes}
+
+Directory hashes are shortcuts for often used directories. You can
+expand them by typing \kbd{\~{}hash}. Usage example: 'cd \kbd{\~}doc'
+
+\commandlistbegin
+@@INSERT-hasheddirs@@
+\commandlistend
+
+\subsection*{System-Wide Aliases}
+
+\commandlistbegin
+@@INSERT-aliases-system@@
+\commandlistend
+
+\subsection*{Global Functions}
+
+\commandlistbegin
+@@INSERT-functions-system@@
+@@INSERT-functions-services@@
+\commandlistend
+
+\vspace{8pt}
+\subsection*{Debian commands}
+
+Notice: if not executed as root it tries to run the command via sudo if
+necessary.
+
+\commandlistbegin
+@@INSERT-aliases-debian@@
+@@INSERT-functions-debian@@
+\commandlistend
+
+\subsection*{Aliases for user (grml)}
+
+\commandlistbegin
+@@INSERT-aliases-user@@
+\commandlistend
+
+\subsection*{Abbreviation expansion for user (grml)}
+
+As of version 0.9 grml does not enable global aliases anymore.  Instead, a
+feature similiar to vim's 'iab' was added. The default key-sequence to trigger
+the expansion is ',.'.
+
+Example:
+
+\commandlistbegin
+\kbd{co}\begin{Huge},.\end{Huge} \quad expands to: \kbd{./configure \&\& make \&\& sudo make install}
+\commandlistend
+
+The configuration of this feature and its implementation are described in the zshwiki
+<\url{http://zshwiki.org/home/examples/zleiab}>.
+
+\commandlistbegin
+@@INSERT-abbrev@@
+%\vspace{35pt} % temporary hack for alignment of columns/rows
+\commandlistend
+
+\vspace{12pt}
+Most of the normal aliases are also added to this database, so you may expand them
+just like this as well.
+
+%\pagebreak
+
+%% Global Aliases are disabled ATM.
+%\subsection*{Global Aliases}
+%
+%Global Aliases are expanded {\it everywhere} on the command line, not
+%only if they are at the first position. Example: 'cat foo bar C' is the
+%same as running 'cat foo bar | wc -l'.
+%
+%\commandlistbegin
+%\command{BG}{\kbd{\& exit}}
+%\command{C}{\kbd{| wc -l}}
+%\command{G}{\kbd{| grep}}
+%\command{H}{\kbd{| head}}
+%\command{Hl}{\kbd{-{}-help |\& less -r} \quad(display help in pager)}
+%\command{K}{\kbd{| keep}}
+%\command{L}{\kbd{| less}}
+%\command{M}{\kbd{| most}}
+%\command{N}{\kbd{\&>/dev/null} \quad(No Output)}
+%\command{R}{\kbd{| tr A-z N-za-m} \quad(ROT13)}
+%\command{SL}{\kbd{| sort | less}}
+%\command{S}{\kbd{| sort}}
+%\command{T}{\kbd{| tail}}
+%\command{V}{\kbd{| vim -}}
+%\commandlistend
+
+\subsection*{Functions for user (grml)}
+
+\textbf{Searching}
+
+\commandlistbegin
+@@INSERT-functions-search@@
+\commandlistend
+
+\vspace{12pt}
+\textbf{Shortcuts}
+
+\commandlistbegin
+@@INSERT-functions-shortcuts@@
+\commandlistend
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Dieser Trenner muss eingefügt werden, wenn eine Tabelle zu lang ist
+% und daher nicht von LaTeX umbrochen wird.
+%\commandlistend
+%
+%\commandlistbegin
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%% }}}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Bibliographieverzeichnis {{{
+%\newpage
+%\nocite{*}
+%\bibliographystyle{plaindin}
+%\bibliography{quellen}
+%%% }}}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\end{document}
+
+%%% vim:set ai tw=80 fdm=marker:   EOF
