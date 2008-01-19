@@ -370,30 +370,6 @@ just like this as well.
 
 %\pagebreak
 
-%% Global Aliases are disabled ATM.
-%\subsection*{Global Aliases}
-%
-%Global Aliases are expanded {\it everywhere} on the command line, not
-%only if they are at the first position. Example: 'cat foo bar C' is the
-%same as running 'cat foo bar | wc -l'.
-%
-%\commandlistbegin
-%\command{BG}{\kbd{\& exit}}
-%\command{C}{\kbd{| wc -l}}
-%\command{G}{\kbd{| grep}}
-%\command{H}{\kbd{| head}}
-%\command{Hl}{\kbd{-{}-help |\& less -r} \quad(display help in pager)}
-%\command{K}{\kbd{| keep}}
-%\command{L}{\kbd{| less}}
-%\command{M}{\kbd{| most}}
-%\command{N}{\kbd{\&>/dev/null} \quad(No Output)}
-%\command{R}{\kbd{| tr A-z N-za-m} \quad(ROT13)}
-%\command{SL}{\kbd{| sort | less}}
-%\command{S}{\kbd{| sort}}
-%\command{T}{\kbd{| tail}}
-%\command{V}{\kbd{| vim -}}
-%\commandlistend
-
 \subsection*{Functions for user (grml)}
 
 \textbf{Searching}
