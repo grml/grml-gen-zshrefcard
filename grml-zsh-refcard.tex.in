@@ -124,8 +124,7 @@
 %%% Oben: Links, Mitte, Rechts
  \ihead[]{{\Huge GRML-Zsh-Refcard}}
  \chead[]{}
- \ohead[]{Revision: Die Feb 06 20:11:16 CET 2007}
- %\ohead[]{Revision: \today}
+ \ohead[]{Generated: \today}
 %%% Unten: Links, Mitte, Rechts
  \ifoot[]{\vspace{-3pt}GRML-Zsh-Refcard}
  \cfoot[]{}
