@@ -38,6 +38,9 @@ use strict;
 ### Yes, this could be done with real names instead of numbers.
 ### But names tend to be rather long. I don't want that.
 ###
+### This scripts works on quite some global variables, which is *not*
+### a good idea most of the time. Thank god it's just a ~500 line script. :)
+###
 #}}}
 
 ### variables {{{
@@ -50,7 +53,7 @@ my $MAX_INPUT=10000;
 my $verbose = 0;
 
 if (defined($ARGV[0])) {
-  $verbose = length($ARGV[0]);
+    $verbose = length($ARGV[0]);
 }
 my @secmap = (
     "default",    #0
@@ -74,45 +77,49 @@ my (
 my $splitstring="\\commandlistend\n\\pagebreak\n\\commandlistbegin";
 ###}}}
 ### subroutines {{{
-sub dumpdata {
+
+sub dumpdata { #{{{
     my ($key, $entry);
 
     if ($verbose < 5) { return; }
     xprint(5, " --- Data ---\n");
+
     foreach $key (sort keys(%other)) {
         xprint(5, "    \@\@INSERT-other-$key\@\@ -> $other{$key}\n");
     }
+
     foreach $key (sort keys(%data)) {
         xprint(5, "    \@\@INSERT-$key\@\@ =>\n");
         foreach $entry (sort @{ $data{$key} }) {
             xprint(5, "$entry\n");
         }
     }
+
     foreach $key (sort keys(%splits)) {
         xprint(5, "    List-Splitting Offset for $key:\n");
         foreach $entry (@{ $splits{$key} }) {
-        xprint(5, "$entry\n");
+            xprint(5, "$entry\n");
         }
     }
     xprint(5, " --- Dump ---\n");
 }
-
-sub xprint {
+#}}}
+sub xprint { #{{{
     my $level = shift;
 
     if ($verbose >= $level) {
         print STDERR @_;
     }
 }
-
-sub escape_string {
+#}}}
+sub escape_string { #{{{
     my ($in) = @_;
 
     $in =~ s!([\\\{\}\*\&~\$_])!\\$1!g;
     return($in)
 }
-
-sub demystify_keys {
+#}}}
+sub demystify_keys { #{{{
     # what an ugly hack :-)
     my ($keys) = @_;
     my ($k, $out, @tok);
@@ -120,12 +127,13 @@ sub demystify_keys {
     @tok = split(/(\\e[^\^]|\^.)/, $keys);
     $out = '';
     foreach $k (@tok) {
-        if ($k eq '') { next; }
+        if ($k eq '') {
+            next;
+        }
 
         if ($k =~ m!^[^\\\^]!) {
             $k =~ s!(.)! $1!g;
-        }
-        else {
+        } else {
             $k =~ s!\\e!ESC-!g;
             $k =~ s!\^I!TAB!g;
             $k =~ s!\^[jJmM]!return!g;
@@ -136,17 +144,22 @@ sub demystify_keys {
 
     return($out);
 }
-
-sub insert {
+#}}}
+sub insert { #{{{
     my ($linenum, $cat, $sec) = @_;
     my ($entry, $count);
 
-    if ($sec eq '') { $sec = 'default'; }
+    if ($sec eq '') {
+        $sec = 'default';
+    }
+
     if (!defined($data{"$cat-$sec"})) {
         warn("Unknown insertion tag in line $linenum (\@\@INSERT-$cat-$sec\@\@). IGNORING.\n");
         return;
     }
+
     xprint(1, "inserting: category($cat) section($sec), line: $linenum\n");
+
     $count = 0;
     foreach $entry (sort @{ $data{"$cat-$sec"} }) {
         my $is;
@@ -161,190 +174,8 @@ sub insert {
         $count++;
     }
 }
-
-sub handle_hashdir {
-    my ($sec, $desc) = @_;
-    my ($dir, $value);
-
-    if ($sec eq '') { $sec=0; }
-
-    xprint(1, "Handling hashed dir (section: $secmap[$sec]) in line $ln ($desc)\n");
-
-    $ln++;
-    while ($ln <= $i) {
-        if ($input[$ln] =~ m!^\s*\#d[0-9]*\#!) {
-            xprint(1, "Ending hashed dir handling in line $ln.\n");
-            $ln++;
-            return;
-        }
-        if ($input[$ln] =~ m!\s*hash\s+-d\s+([^=]+)=(.*)!) {
-            $dir=$1; $value=&escape_string($2);
-            push(@{ $data{"hasheddirs-$secmap[$sec]"} }, "\\command\{$dir\}\{$value\}");
-        }
-        else {
-            warn("Broken hashed dir in line $ln. IGNORING.\n");
-        }
-        $ln++;
-    }
-}
-
-sub handle_abbrev {
-    my ($sec, $desc) = @_;
-    my ($abbrev, $value, $doc);
-
-    if ($sec eq '') { $sec=0; }
-
-    xprint(1, "Handling abbreviation (section: $secmap[$sec]) in line $ln ($desc)\n");
-
-    $ln++;
-    while ($ln <= $i) { # the global $i
-        if ($input[$ln] =~ m!^\s*\#A[0-9]*\#!) {
-            xprint(1, "Ending abbreviation handling in line $ln.\n");
-            $ln++;
-            return;
-        }
-        $doc = '';
-        if ($input[$ln] =~ s/\s+\#d\s*([^#]*)$//) { $doc = $1; }
-        if ($input[$ln] =~ m!\s*['"]([^"']*)['"]\s\$?['"]([^"']*)['"]!) {
-            $abbrev = $1; $value = &escape_string($2);
-            xprint(2, "ab: $abbrev -> $value ($doc);\n");
-            push(@{ $data{"abbrev-$secmap[$sec]"} }, "\\command\{$abbrev\}\{\\kbd\{$value" . ($doc ne '' ? "\}\\quad $doc" : "\}") . "\}");
-        }
-        else {
-            warn("Broken abbreviation in line $ln. IGNORING.\n");
-        }
-        $ln++;
-    }
-}
-
-sub handle_function {
-    my ($sec, $desc) = @_;
-
-    if ($sec eq '') { $sec=0; }
-
-    xprint(1, "Handling function (section: $secmap[$sec]) in line $ln ($desc)\n");
-
-    $ln++;
-    if ($input[$ln] =~ m!\s*(function)?\s*([^(\s]*)!) {
-        xprint(2, "  - $2()\n");
-        push(@{ $data{"functions-$secmap[$sec]"} }, "\\command\{$2()\}\{$desc\}");
-    }
-    else {
-        warn("Parsing function line $ln ($input[$ln]) failed. IGNORING.\n");
-    }
-}
-
-sub handle_alias {
-    my ($sec, $desc) = @_;
-    my ($alias, $value);
-
-    if ($sec eq '') { $sec=0; }
-
-    xprint(1, "Handling alias (section: $secmap[$sec]) in line $ln ($desc)\n");
-
-    $ln++;
-    if ($input[$ln] =~ m!\s*alias (-[haocC] +)*([^=]*)=["'](.*)["']!) {
-        $alias=$2; $value=&escape_string($3);
-        $desc =~ s!\@a\@!$value!;
-        push(@{ $data{"aliases-$secmap[$sec]"} }, "\\command\{$alias\}\{$desc\}");
-    }
-    else {
-        warn("Parsing alias line $ln ($input[$ln]) failed. IGNORING.\n");
-    }
-}
-
-sub handle_other {
-    my ($sec, $desc) = @_;
-
-    $desc =~ m!([^\s]+)\s+(.*)!;
-    xprint(1, "Handling 'other' tag in line $ln ($1 -> $2))\n");
-    $other{$1} = $2;
-    $ln++;
-}
-
-sub handle_keybinding {
-    my ($sec, $desc) = @_;
-    my ($kbd, $value);
-
-    if ($sec eq '') { $sec=0; }
-
-    xprint(1, "Handling keybinding (section: $secmap[$sec]) in line $ln ($desc)\n");
-
-    $ln++;
-    if ($input[$ln] =~ m!^.*bindkey\s+[^'"]*(.*)['"]\s+([\w-]*)\#?.*!) {
-        $value=&escape_string($2);
-        $kbd = $1;
-        $kbd =~ s!^["']!!;
-        $kbd =~ s/["']$//;
-        $kbd=&demystify_keys($kbd);
-        $desc =~ s!\@k\@!$value!;
-    #xprint(0, "!-> DEBUG: kbd: $kbd - value: $value - desc: $desc\n");
-        push(@{ $data{"keybindings-$secmap[$sec]"} }, "\\command\{$kbd\}\{$desc\}");
-    }
-    else {
-        warn("Parsing keybinding line $ln ($input[$ln]) failed. IGNORING.\n");
-    }
-}
-
-sub handle_variable {
-    my ($sec, $desc) = @_;
-    my ($var, $value);
-
-    if ($sec eq '') { $sec=0; }
-
-    xprint(1, "Handling variable (section: $secmap[$sec]) in line $ln ($desc)\n");
-
-    $ln++;
-    if ($input[$ln] =~ m/\s*(\S+)=(.+)$/) {
-        $var = $1 ; $value = $2;
-        $value =~ s!^\$\{\w*:-(.*)\}!$1!;
-        $value =~ s!^['"]!!;
-        $value =~ s/['"]$//;
-        $value = &escape_string($value);
-        push(@{ $data{"variables-$secmap[$sec]"} }, "\\command\{$var\}\{\\kbd\{$value" . ($desc ne '' ? "\}\\quad $desc" : "\}") . "\}");
-    }
-    else {
-        warn("Parsing variable line $ln ($input[$ln]) failed. IGNORING.\n");
-    }
-}
-
-sub handle_manual {
-    # this is different than the other handle_*() subs.
-    my ($code, $key, $value) = @_;
-    my ($sec);
-
-    xprint(1, "Handling manual entry (code: $code) in line $ln ($key -> $value)\n");
-
-    $sec = ( (length($code) > 1) ? substr($code, 1) : 0);
-    if    (substr($code, 0, 1) eq 'a') {
-        push(@{ $data{"aliases-$secmap[$sec]"} }, "\\command\{$key\}\{$value\}");
-    }
-    elsif (substr($code, 0, 1) eq 'A') {
-        push(@{ $data{"abbrev-$secmap[$sec]"} }, "\\command\{$key\}\{$value\}");
-    }
-    elsif (substr($code, 0, 1) eq 'd') {
-        push(@{ $data{"hasheddirs-$secmap[$sec]"} }, "\\command\{$key\}\{$value\}");
-    }
-    elsif (substr($code, 0, 1) eq 'f') {
-        push(@{ $data{"functions-$secmap[$sec]"} }, "\\command\{$key\}\{$value\}");
-    }
-    elsif (substr($code, 0, 1) eq 'k') {
-        push(@{ $data{"keybindings-$secmap[$sec]"} }, "\\command\{$key\}\{$value\}");
-    }
-    elsif (substr($code, 0, 1) eq 'o') {
-        push(@{ $data{"other-$secmap[$sec]"} }, "\\command\{$key\}\{$value\}");
-    }
-    elsif (substr($code, 0, 1) eq 'v') {
-        push(@{ $data{"variables-$secmap[$sec]"} }, "\\command\{$key\}\{$value\}");
-    }
-    else {
-        warn("Unknown doc-definition character in manual-line $ln ($1). IGNORING.\n");
-        $ln++;
-    }
-    $ln++;
-}
-
-sub set_option {
+#}}}
+sub set_option { #{{{
     my ($optstring) = @_;
     my ($opt, $val);
 
@@ -358,24 +189,202 @@ sub set_option {
                 my $when = $2;
                 xprint(2, "  splitting values (for $what): " . join(' ', split(/,/, $when)) . "\n");
                 @{ $splits{"$what"} } = split(/,/, $when);
-            }
-            else {
+            } else {
                 warn("Parsing split option failed in line $ln. IGNORING.\n");
             }
-        }
-        else {
+        } else {
             warn("Unknown option ($opt) in line $ln. IGNORING.\n");
         }
-    }
-    else {
+    } else {
         warn("Parsing option in line $ln failed. IGNORING.\n");
     }
 }
+#}}}
+
+sub handle { #{{{
+    # name:     hashdir, abbrev etc.
+    # wfuncref: reference to the function, that does the work
+    # sec:      section number
+    # desc:     description string
+    my ($name, $wfuncref, $sec, $desc) = @_;
+
+    if ($sec eq '') {
+        $sec = 0;
+    }
+
+    xprint(1, "Handling $name (section: secmap[$sec]) in line $ln ($desc)\n");
+
+    $ln++;
+    if (!$wfuncref->($sec, $desc)) {
+        warn("Broken $name in line $ln. IGNORING.\n");
+    }
+}
+#}}}
+sub handle_manual { #{{{
+    # this is different than the other handle_*() subs.
+    my ($code, $key, $value) = @_;
+    my ($sec);
+
+    xprint(1, "Handling manual entry (code: $code) in line $ln ($key -> $value)\n");
+
+    $sec = ( (length($code) > 1) ? substr($code, 1) : 0);
+    if      (substr($code, 0, 1) eq 'a') {
+        push(@{ $data{"aliases-$secmap[$sec]"} }, "\\command\{$key\}\{$value\}");
+    } elsif (substr($code, 0, 1) eq 'A') {
+        push(@{ $data{"abbrev-$secmap[$sec]"} }, "\\command\{$key\}\{$value\}");
+    } elsif (substr($code, 0, 1) eq 'd') {
+        push(@{ $data{"hasheddirs-$secmap[$sec]"} }, "\\command\{$key\}\{$value\}");
+    } elsif (substr($code, 0, 1) eq 'f') {
+        push(@{ $data{"functions-$secmap[$sec]"} }, "\\command\{$key\}\{$value\}");
+    } elsif (substr($code, 0, 1) eq 'k') {
+        push(@{ $data{"keybindings-$secmap[$sec]"} }, "\\command\{$key\}\{$value\}");
+    } elsif (substr($code, 0, 1) eq 'o') {
+        push(@{ $data{"other-$secmap[$sec]"} }, "\\command\{$key\}\{$value\}");
+    } elsif (substr($code, 0, 1) eq 'v') {
+        push(@{ $data{"variables-$secmap[$sec]"} }, "\\command\{$key\}\{$value\}");
+    } else {
+        warn("Unknown doc-definition character in manual-line $ln ($1). IGNORING.\n");
+        $ln++;
+    }
+    $ln++;
+}
+#}}}
+sub handle_other { #{{{
+    # a very simple handler
+    my ($sec, $desc) = @_;
+
+    $desc =~ m!([^\s]+)\s+(.*)!;
+    xprint(1, "Handling 'other' tag in line $ln ($1 -> $2))\n");
+    $other{$1} = $2;
+    $ln++;
+}
+#}}}
+sub __abbrev { #{{{
+    my ($sec, $desc) = @_;
+    my ($abbrev, $value, $doc);
+
+    while ($ln <= $i) { # the global $i
+        if ($input[$ln] =~ m!^\s*\#A[0-9]*\#!) {
+            xprint(1, "Ending abbreviation handling in line $ln.\n");
+            $ln++;
+            return 1;
+        }
+
+        $doc = '';
+        if ($input[$ln] =~ s/\s+\#d\s*([^#]*)$//) {
+            $doc = $1;
+        }
+
+        if ($input[$ln] =~ m!\s*['"]([^"']*)['"]\s\$?['"]([^"']*)['"]!) {
+            $abbrev = $1; $value = &escape_string($2);
+            xprint(2, "ab: $abbrev -> $value ($doc);\n");
+            push(@{ $data{"abbrev-$secmap[$sec]"} }, "\\command\{$abbrev\}\{\\kbd\{$value" . ($doc ne '' ? "\}\\quad $doc" : "\}") . "\}");
+        } else {
+            return 0;
+        }
+        $ln++;
+    }
+    return 0;
+}
+#}}}
+sub __alias { #{{{
+    my ($sec, $desc) = @_;
+    my ($alias, $value);
+
+    if ($input[$ln] =~ m!\s*alias (-[haocC] +)*([^=]*)=["'](.*)["']!) {
+        $alias=$2; $value=&escape_string($3);
+        $desc =~ s!\@a\@!$value!;
+        push(@{ $data{"aliases-$secmap[$sec]"} }, "\\command\{$alias\}\{$desc\}");
+    } else {
+        return 0;
+    }
+
+    return 1;
+}
+#}}}
+sub __function { #{{{
+    my ($sec, $desc) = @_;
+
+    if ($input[$ln] =~ m!\s*(function)?\s*([^(\s]*)!) {
+        xprint(2, "  - $2()\n");
+        push(@{ $data{"functions-$secmap[$sec]"} }, "\\command\{$2()\}\{$desc\}");
+    } else {
+        return 0;
+    }
+
+    return 1;
+}
+#}}}
+sub __hashdir { #{{{
+    my ($sec, $desc) = @_;
+    my ($dir, $value);
+
+    while ($ln <= $i) {
+
+        if ($input[$ln] =~ m/^\s*\#d[0-9]*\#/) {
+            xprint(1, "Ending hashed dir handling in line $ln.\n");
+            $ln++;
+            return 1;
+        }
+
+        if ($input[$ln] =~ m!\s*hash\s+-d\s+([^=]+)=(.*)!) {
+            $dir=$1; $value=&escape_string($2);
+            push(@{ $data{"hasheddirs-$secmap[$sec]"} }, "\\command\{$dir\}\{$value\}");
+        } else {
+            return 0;
+        }
+
+        $ln++;
+    }
+    return 0;
+}
+#}}}
+sub __keybinding { #{{{
+    my ($sec, $desc) = @_;
+    my ($kbd, $value);
+
+    if ($input[$ln] =~ m!^.*bindkey\s+[^'"]*(.*)['"]\s+([\w-]*)\#?.*!) {
+        ($kbd, $value) = ($1, $2);
+        $value=&escape_string($value);
+        $kbd =~ s!^["']!!;
+        $kbd =~ s/["']$//;
+        $kbd=&demystify_keys($kbd);
+        $desc =~ s!\@k\@!$value!;
+
+       #xprint(0, "!-> DEBUG: kbd: $kbd - value: $value - desc: $desc\n");
+
+        push(@{ $data{"keybindings-$secmap[$sec]"} }, "\\command\{$kbd\}\{$desc\}");
+    } else {
+        return 0;
+    }
+
+    return 1;
+}
+#}}}
+sub __variable { #{{{
+    my ($sec, $desc) = @_;
+    my ($var, $value);
+
+    if ($input[$ln] =~ m/\s*(\S+)=(.+)$/) {
+        $var = $1 ; $value = $2;
+        $value =~ s!^\$\{\w*:-(.*)\}!$1!;
+        $value =~ s!^['"]!!;
+        $value =~ s/['"]$//;
+        $value = &escape_string($value);
+        push(@{ $data{"variables-$secmap[$sec]"} }, "\\command\{$var\}\{\\kbd\{$value" . ($desc ne '' ? "\}\\quad $desc" : "\}") . "\}");
+    } else {
+        return 0;
+    }
+
+    return 1;
+}
+#}}}
 
 ###}}}
 
-### main()
-### {{{ handling stdin
+### main() {{{
+
+### read our input from stdin {{{
 $i = 0;
 $input[0]='index==linenumber :-)';
 while (<STDIN>) {
@@ -387,45 +396,38 @@ while (<STDIN>) {
     push(@input, $_);
 }
 
+# work on the lines in memory (jumping back and forth is simple this way)
 $ln = 1;
 while ($ln <= $i) {
     if ($input[$ln] =~ m/^\#\@\#\s*(.*)$/) {
         &set_option($1);
         next;
     }
+
     if ($input[$ln] =~ m/^\s*\#([a-zA-Z])([0-9]*)\#\s*(.*)$/) {
-        if    ($1 eq 'a') {
-            &handle_alias($2, $3);
-        }
-        elsif ($1 eq 'A') {
-            &handle_abbrev($2, $3);
-        }
-        elsif ($1 eq 'd') {
-            &handle_hashdir($2, $3);
-        }
-        elsif ($1 eq 'f') {
-            &handle_function($2, $3);
-        }
-        elsif ($1 eq 'k') {
-            &handle_keybinding($2, $3);
-        }
-        elsif ($1 eq 'o') {
+        if      ($1 eq 'a') {
+            &handle("alias", \&__alias, $2, $3);
+        } elsif ($1 eq 'A') {
+            &handle("abbreviation", \&__abbrev, $2, $3);
+        } elsif ($1 eq 'd') {
+            &handle("hashed dir", \&__hashdir, $2, $3);
+        } elsif ($1 eq 'f') {
+            &handle("function", \&__function, $2, $3);
+        } elsif ($1 eq 'k') {
+            &handle("keybinding", \&__keybinding, $2, $3);
+        } elsif ($1 eq 'v') {
+            &handle("variable", \&__variable, $2, $3);
+        } elsif ($1 eq 'o') {
             &handle_other($2, $3);
-        }
-        elsif ($1 eq 'v') {
-            &handle_variable($2, $3);
-        }
-        elsif ($1 eq 'm') {
+        } elsif ($1 eq 'm') {
             my $arg = $3;
             $arg =~ m!^\s*([a-zA-Z][0-9]*)\s+(\S+)\s+(.*)!;
             &handle_manual($1, $2, $3);
-        }
-        else {
+        } else {
             warn("Unknown doc-definition character in line $ln ($1). IGNORING.\n");
             $ln++;
         }
-    }
-    else {
+    } else {
         $ln++;
     }
 }
@@ -433,22 +435,30 @@ while ($ln <= $i) {
 
 &dumpdata();
 
+# read the .in file and put in stuff we gathered from stdin earlier
 open(IN, "<$refin") or die "could not open $refin: $!\n";
+
+#{{{ output loop
 $i=0;
-while (<IN>) { #{{{ output loop
+while (<IN>) {
     $i++;
     while (m!\@\@INSERT-other-[^@]+\@\@!) {
         s!\@\@INSERT-other-([^@]+)\@\@!$other{$1}!;
         xprint(2, "Inserting \@\@INSERT-other-$1\@\@ -> $other{$1}\n");
     }
+
     if (m!^\@\@INSERT-([^-]*)-?(.*)\@\@!) {
         if ($1 eq '') {
             die "malformed insertion tag in line $i ($_). ABORT\n";
         }
+
         &insert($i, $1, $2);
-    }
-    else {
+    } else {
         print;
     }
-}#}}}
+}
+#}}}
+
 close(IN);
+
+#}}}
