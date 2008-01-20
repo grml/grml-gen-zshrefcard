@@ -278,6 +278,7 @@ to vi mode.
 \command{setopt vi}{Switch to vi mode}
 \commandlistend
 
+\vspace{8pt}
 The following keybindings document some important keybindings which are not
 defined by zsh's default configuration. Tip: press <tab> twice when completing a
 command you installed which is not yet known to zsh or run 'rehash' manually.
