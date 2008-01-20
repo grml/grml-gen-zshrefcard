@@ -267,7 +267,7 @@ values:
 \command{umask @@INSERT-other-r_umask@@}{new files for root user \kbd{@@INSERT-other-r_umaskstr@@}}
 \commandlistend
 
-\subsection*{Key Bindings}
+\subsection*{Keybindings}
 
 Default keybinding mode is Emacs, i.e. you can use Emacs keybinds like
 \kbd{^A {\rm or} ^E} on the command line. You can however also switch
@@ -277,8 +277,6 @@ to vi mode.
 \command{setopt emacs}{Switch to Emacs mode (default)}
 \command{setopt vi}{Switch to vi mode}
 \commandlistend
-
-\subsection*{Keybindings}
 
 The following keybindings document some important keybindings which are not
 defined by zsh's default configuration. Tip: press <tab> twice when completing a
