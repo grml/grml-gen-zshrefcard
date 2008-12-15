@@ -223,7 +223,7 @@ don't have write permissions to /etc/zsh/zshrc on your own, copy the file
 Write important commands you always need (no matter what's inside zsh's
 history!) to a file named \textbf{\kbd{\~}/.important\_commands}.
 
-Notice that /etc/skel/.zshrc itself is not sourced by zsh but copied to
+Note that /etc/skel/.zshrc itself is not sourced by zsh but copied to
 \$HOME-directory of your non-root user once. To keep your
 \textbf{\kbd{\~}/.zshrc} in sync with upstream's development just put your
 personal stuff into a file named \textbf{\kbd{\~}/.zshrc.local} and point your
@@ -328,7 +328,7 @@ expand them by typing \kbd{\~{}hash}. Usage example: 'cd \kbd{\~}doc'
 \vspace{8pt}
 \subsection*{Debian commands}
 
-Notice: if not executed as root it tries to run the command via sudo if
+Note: if not executed as root zsh tries to run the command via sudo if
 necessary.
 
 \commandlistbegin
