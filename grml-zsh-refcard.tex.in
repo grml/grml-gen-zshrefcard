@@ -205,39 +205,40 @@
 
 \subsection*{Configuration files}
 
-\small{Global zsh configuration is located in \textbf{/etc/zsh/zshrc}.  User
+\small{The global zsh configuration is located in \textbf{/etc/zsh/zshrc}. User
 specific settings are defined in \textbf{/etc/skel/.zshrc} (which can be found
-in \kbd{\~}/.zshrc for user grml too). Please note that some functions/aliases
-are not active by default for user root (referred to as '... for user (grml)'
-below) because of security reasons. Just run 'zshskel' (as user root) to source
-the file /etc/skel/.zshrc. Some aliases/functions also aren't active if the
-appropriate executable isn't present on your system.
+in \kbd{\~}/.zshrc of the user grml, as well). Please note that some
+functions/aliases are not active by default for user root (referred to as
+'... for user (grml)' below) for of security reasons. Simply run 'zshskel'
+(as root) to source /etc/skel/.zshrc. Some aliases/functions are not activated
+if the appropriate executable isn't present on your system, either.
 
-/etc/zsh/zshrc: this file can be adjusted according to your needs via using a
-file named /etc/zsh/zshrc.local which is not part of the Debian package
-management. So place all your changes in the file /etc/zsh/zshrc.local.  If you
-don't have write permissions to /etc/zsh/zshrc on your own, copy the file
-/etc/zsh/zshrc to \kbd{\~}/.zshrc.global and it will be sourced by
-\kbd{\~}/.zshrc then.
+/etc/zsh/zshrc: this file can be adjusted according to your needs via a file
+named /etc/zsh/zshrc.local, which is not under the control of Debian package
+management. This, you need to place all your changes in the file
+/etc/zsh/zshrc.local. If you do not have write permission to
+/etc/zsh/zshrc, copy the file /etc/zsh/zshrc to \kbd{\~}/.zshrc.global
+and it will be sourced by \kbd{\~}/.zshrc.
 
-Write important commands you always need (no matter what's inside zsh's
-history!) to a file named \textbf{\kbd{\~}/.important\_commands}.
+Put important commands which you need on a regular basis into a file named
+\textbf{\kbd{\~}/.important\_commands}.
 
-Note that /etc/skel/.zshrc itself is not sourced by zsh but copied to
-\$HOME-directory of your non-root user once. To keep your
-\textbf{\kbd{\~}/.zshrc} in sync with upstream's development just put your
+Note that /etc/skel/.zshrc itself is not sourced by zsh, but copied to the
+\$HOME-directory of your non-root user on user creation. To keep your
+\textbf{\kbd{\~}/.zshrc} in sync with upstream's development, just put your
 personal stuff into a file named \textbf{\kbd{\~}/.zshrc.local} and point your
-\kbd{\~}/.zshrc to /etc/skel/.zshrc running 'ln -s /etc/skel/.zshrc
+\kbd{\~}/.zshrc to /etc/skel/.zshrc by running 'ln -s /etc/skel/.zshrc
 \kbd{\~}/.zshrc'.}
 
-You can get information regarding configuration files and some environment
-variables to adjust runtime behaviour of grml's zsh running \textbf{zsh-help}.
+More information regarding configuration files and some environment
+variables to adjust runtime behaviour of grml's zsh can be accessed by
+running \textbf{zsh-help}.
 
 \subsection*{Using grml's zsh configuration on a non-grml system}
 
 You do not have to use grml/Debian to use grml's zsh configuration.
-Just retrieve and install the configuration files by running the following
-in your home directory:
+Just retrieve and install the configuration files in your home directory.
+You can do this by running:
 
 \begin{tiny}
 \begin{verbatim}
@@ -248,15 +249,15 @@ wget -O .zshrc.global http://git.grml.org/f/grml-etc-core/etc/zsh/zshrc
 
 \subsection*{Problems?}
 
-Please report any problems you notice using the grml zsh configuration
-to the grml-team. The configuration has been tested on several Linux
-Distribution (Debian, Gentoo, SuSE,...) and non-Linux systems as well
-(FreeBSD, Solaris, AIX,...) but there might be issues anyway. Please
-\href{http://grml.org/bugs/}{report them}!
+Please report any problems you encounter while using the grml zsh
+configuration to the grml team. The configuration has been tested on several
+Linux distributions (Debian, Gentoo, SuSE, etc) and non-Linux systems as well
+(FreeBSD, Solaris, AIX, etc), but there might be issues, anyway.
+\href{http://grml.org/bugs/}{Report them, please!}
 
 \subsection*{Settings}
 
-If not already defined, the variables are set to the following
+If not already defined, these variables are set to the following
 values:
 
 \commandlistbegin
@@ -268,11 +269,11 @@ values:
 \command{umask @@INSERT-other-r_umask@@}{new files for root user \kbd{@@INSERT-other-r_umaskstr@@}}
 \commandlistend
 
-\subsection*{Keybindings}
+\subsection*{Key-bindings}
 
 Default keybinding mode is Emacs, i.e. you can use Emacs keybinds like
-\kbd{^A {\rm or} ^E} on the command line. You can however also switch
-to vi mode.
+\kbd{^A {\rm or} ^E} on the command line. However, you can switch to vi
+mode.
 
 \commandlistbegin
 \command{setopt emacs}{Switch to Emacs mode (default)}
@@ -280,9 +281,9 @@ to vi mode.
 \commandlistend
 
 \vspace{8pt}
-The following keybindings document some important keybindings which are not
-defined by zsh's default configuration. Tip: press <tab> twice when completing a
-command you installed which is not yet known to zsh or run 'rehash' manually.
+The following documents some important keybindings which are not
+defined in zsh's default configuration. Hint: press <tab> twice when completing
+a command you installed which is not yet known to zsh or run 'rehash' manually.
 
 \commandlistbegin
 @@INSERT-keybindings@@
@@ -292,8 +293,8 @@ command you installed which is not yet known to zsh or run 'rehash' manually.
 
 \subsection*{Terminal Settings}
 
-There are 8 aliases designed to change the font size of the
-XTerm, Aterm\ldots These are:
+There are 8 aliases designed to change the font size of terminal
+emulators (XTerm, Aterm, etc). They are:
 \kbd{hide},
 \kbd{tiny},
 \kbd{small},
@@ -306,8 +307,8 @@ XTerm, Aterm\ldots These are:
 
 \subsection*{Hashes}
 
-Directory hashes are shortcuts for often used directories. You can
-expand them by typing \kbd{\~{}hash}. Usage example: 'cd \kbd{\~}doc'
+Directory hashes are shortcuts for common directories. You can
+expand them by typing \kbd{\~{}hash}. Usage: 'cd \kbd{\~}doc'
 
 \commandlistbegin
 @@INSERT-hasheddirs@@
@@ -329,8 +330,7 @@ expand them by typing \kbd{\~{}hash}. Usage example: 'cd \kbd{\~}doc'
 \vspace{8pt}
 \subsection*{Debian commands}
 
-Note: if not executed as root zsh tries to run the command via sudo if
-necessary.
+Please note: if not executed as root, these aliases try to run the command via sudo.
 
 \commandlistbegin
 @@INSERT-aliases-debian@@
@@ -345,7 +345,7 @@ necessary.
 
 \subsection*{Abbreviation expansion for user (grml)}
 
-As of version 0.9 grml does not enable global aliases anymore.  Instead, a
+As of version 0.9, grml does not enable global aliases anymore. Instead, a
 feature similiar to vim's 'iab' was added. The default key-sequence to trigger
 the expansion is ',.'.
 
@@ -355,7 +355,7 @@ Example:
 \kbd{co}\begin{Huge},.\end{Huge} \quad expands to: \kbd{./configure \&\& make \&\& sudo make install}
 \commandlistend
 
-The configuration of this feature and its implementation are described in the zshwiki
+The configuration of this feature and its implementation are described on the zsh wiki
 <\url{http://zshwiki.org/home/examples/zleiab}>.
 
 \commandlistbegin
@@ -365,7 +365,7 @@ The configuration of this feature and its implementation are described in the zs
 
 \vspace{12pt}
 Most of the normal aliases are also added to this database, so you may expand them
-just like this as well.
+like this as well.
 
 %\pagebreak
 
