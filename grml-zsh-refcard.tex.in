@@ -130,7 +130,7 @@
  \cfoot[]{}
  \ofoot[]{\vspace{-3pt}\copyright 2005-2008 \href{mailto:julius@grml.org}{Julius Plenz},
  \href{mailto:mika@grml.org}{Michael Prokop} and
- \href{mailto:ft@bewatermyfriend.org}{Frank Terbeck}}
+ \href{mailto:ft@grml.org}{Frank Terbeck}}
 %%% }}}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -236,12 +236,13 @@ variables to adjust runtime behaviour of grml's zsh running \textbf{zsh-help}.
 \subsection*{Using grml's zsh configuration on a non-grml system}
 
 You do not have to use grml/Debian to use grml's zsh configuration.
-Just retrieve and install the configuration files for example running:
+Just retrieve and install the configuration files by running the following
+in your home directory:
 
 \begin{tiny}
 \begin{verbatim}
-wget -O ~/.zshrc      http://hg.grml.org/grml-etc-core/raw-file/tip/etc/skel/.zshrc
-wget -O ~/.zshrc.global http://hg.grml.org/grml-etc-core/raw-file/tip/etc/zsh/zshrc
+wget -O .zshrc        http://git.grml.org/f/grml-etc-core/etc/skel/.zshrc
+wget -O .zshrc.global http://git.grml.org/f/grml-etc-core/etc/zsh/zshrc
 \end{verbatim}
 \end{tiny}
 
