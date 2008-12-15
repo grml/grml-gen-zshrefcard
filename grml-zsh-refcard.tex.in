@@ -207,7 +207,7 @@
 
 \small{Global zsh configuration is located in \textbf{/etc/zsh/zshrc}.  User
 specific settings are defined in \textbf{/etc/skel/.zshrc} (which can be found
-in \kbd{\~}/.zshrc for user grml too). Please notice that some functions/aliases
+in \kbd{\~}/.zshrc for user grml too). Please note that some functions/aliases
 are not active by default for user root (referred to as '... for user (grml)'
 below) because of security reasons. Just run 'zshskel' (as user root) to source
 the file /etc/skel/.zshrc. Some aliases/functions also aren't active if the
