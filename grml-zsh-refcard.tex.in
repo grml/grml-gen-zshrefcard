@@ -269,7 +269,7 @@ values:
 \command{umask @@INSERT-other-r_umask@@}{new files for root user \kbd{@@INSERT-other-r_umaskstr@@}}
 \commandlistend
 
-\subsection*{Key-bindings}
+\subsection*{Keybindings}
 
 Default keybinding mode is Emacs, i.e. you can use Emacs keybinds like
 \kbd{^A {\rm or} ^E} on the command line. However, you can switch to vi
