@@ -205,30 +205,25 @@
 
 \subsection*{Configuration files}
 
-\small{The global zsh configuration is located in \textbf{/etc/zsh/zshrc}. User
-specific settings are defined in \textbf{/etc/skel/.zshrc} (which can be found
-in \kbd{\~}/.zshrc of the user grml, as well). Please note that some
-functions/aliases are not active by default for user root (referred to as
-'... for user (grml)' below) for of security reasons. Simply run 'zshskel'
-(as root) to source /etc/skel/.zshrc. Some aliases/functions are not activated
-if the appropriate executable isn't present on your system, either.
+\small{Grml's zsh configuration is located in \textbf{/etc/zsh/zshrc}. Please
+note that some functions/aliases are not active by default for user root
+(referred to as '... for user (grml)' below) for of security reasons.
+If you want your root user to use the full setup on your box, put
+\textbf{GRML\_ALWAYS\_LOAD\_ALL=1} into root's \kbd{\~}/.zshrc.pre.
+Some aliases/functions are not activated if the appropriate executable
+isn't present on your system, either.
 
-/etc/zsh/zshrc: this file can be adjusted according to your needs via a file
+You can adjust the grml setup globally to your systems via a file
 named /etc/zsh/zshrc.local, which is not under the control of Debian package
-management. This, you need to place all your changes in the file
-/etc/zsh/zshrc.local. If you do not have write permission to
-/etc/zsh/zshrc, copy the file /etc/zsh/zshrc to \kbd{\~}/.zshrc.global
-and it will be sourced by \kbd{\~}/.zshrc.
+management.
 
 Put important commands which you need on a regular basis into a file named
 \textbf{\kbd{\~}/.important\_commands}.
 
-Note that /etc/skel/.zshrc itself is not sourced by zsh, but copied to the
-\$HOME-directory of your non-root user on user creation. To keep your
-\textbf{\kbd{\~}/.zshrc} in sync with upstream's development, just put your
-personal stuff into a file named \textbf{\kbd{\~}/.zshrc.local} and point your
-\kbd{\~}/.zshrc to /etc/skel/.zshrc by running 'ln -s /etc/skel/.zshrc
-\kbd{\~}/.zshrc'.}
+You can put personal configuration for a user into a file named
+\textbf{\kbd{\~}/.zshrc.local}. Changes you need to have sourced
+\textbf{before} the grml zsh setup is loaded can be put into
+\textbf{\kbd{\~}/.zshrc.pre}.
 
 More information regarding configuration files and some environment
 variables to adjust runtime behaviour of grml's zsh can be accessed by
@@ -242,10 +237,14 @@ You can do this by running:
 
 \begin{tiny}
 \begin{verbatim}
-wget -O .zshrc        http://git.grml.org/f/grml-etc-core/etc/skel/.zshrc
-wget -O .zshrc.global http://git.grml.org/f/grml-etc-core/etc/zsh/zshrc
+wget -O .zshrc http://git.grml.org/f/grml-etc-core/etc/zsh/zshrc
 \end{verbatim}
 \end{tiny}
+
+This is \textbf{different} to earlier versions of grml's zsh setup.
+You only use the zshrc file from /etc/zsh/ \textbf{not} the .zshrc file
+from /etc/skel/ these days. You can remove \kbd{\~}/.zshrc.global if it is
+still present in your home directory.
 
 \subsection*{Problems?}
 
