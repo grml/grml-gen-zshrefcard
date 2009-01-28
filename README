@@ -1,0 +1,28 @@
+Why grml-gen-zshrefcard?
+
+  It's a tedious to document the same code in two different places.
+  Therefore grml-gen-zshrefcard is our poor-man's-doxygen for our zshrc.
+
+How does it work?
+
+  It (the Perl script genrefcard.pl) creates a new latex source file for
+  our zsh-refcard from the zshrc itself and a tex input file
+  (grml-zsh-refcard.tex.in).
+
+How do I work with it?
+
+  (quickstart)
+  % cd ~/src/grml
+  % git clone git://git.grml.org/grml-gen-zshrefcard.git
+  % git clone git://git.grml.org/grml-etc-core.git
+  % cd grml-gen-zshrefcard.git
+  % make test
+
+  The format of the inline documentation comments is described at the
+  top of etc/zsh/zshrc in grml-etc-core. Additional information about
+  the replacement tokens in grml-zsh-refcard.tex.in can be found at the
+  top of the genrefcard.pl script.
+
+  Make your changes to grml-etc-core and check if you're happy with the
+  result of 'make test'. Only changes to the meta-information at the top
+  of the refcard should go into grml-gen-zshrefcard.
