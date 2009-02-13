@@ -15,7 +15,7 @@ How do I work with it?
   % cd ~/src/grml
   % git clone git://git.grml.org/grml-gen-zshrefcard.git
   % git clone git://git.grml.org/grml-etc-core.git
-  % cd grml-gen-zshrefcard.git
+  % cd grml-gen-zshrefcard
   % make test
 
   The format of the inline documentation comments is described at the
