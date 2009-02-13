@@ -128,7 +128,7 @@
 %%% Unten: Links, Mitte, Rechts
  \ifoot[]{\vspace{-3pt}GRML-Zsh-Refcard}
  \cfoot[]{}
- \ofoot[]{\vspace{-3pt}\copyright 2005-2008 \href{mailto:julius@grml.org}{Julius Plenz},
+ \ofoot[]{\vspace{-3pt}\copyright 2005-2009 \href{mailto:julius@grml.org}{Julius Plenz},
  \href{mailto:mika@grml.org}{Michael Prokop} and
  \href{mailto:ft@grml.org}{Frank Terbeck}}
 %%% }}}
