@@ -241,7 +241,7 @@ wget -O .zshrc http://git.grml.org/f/grml-etc-core/etc/zsh/zshrc
 \end{verbatim}
 \end{tiny}
 
-This is \textbf{different} to earlier versions of grml's zsh setup.
+This is \textbf{different} from earlier versions of grml's zsh setup.
 You only use the zshrc file from /etc/zsh/ \textbf{not} the .zshrc file
 from /etc/skel/ these days. You can remove \kbd{\~}/.zshrc.global if it is
 still present in your home directory.
