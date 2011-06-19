@@ -263,8 +263,9 @@ sub __abbrev { #{{{
     my ($sec, $desc) = @_;
     my ($abbrev, $value, $doc);
 
+    xprint(1, "$ln, $i\n");
     while ($ln <= $i) { # the global $i
-        if ($input[$ln] =~ m!^\s*\#A[0-9]*\#!) {
+        if ($input[$ln] =~ m!^\s*#A[0-9]*#!) {
             xprint(1, "Ending abbreviation handling in line $ln.\n");
             $ln++;
             return 1;
@@ -275,12 +276,12 @@ sub __abbrev { #{{{
             $doc = $1;
         }
 
-        if ($input[$ln] =~ m!\s*['"]([^"']*)['"]\s\$?['"]([^"']*)['"]!) {
+        if ($input[$ln] =~ m!^\s*['"]([^"']*)['"]\s+\$?['"]([^"']*)['"]!) {
             $abbrev = $1; $value = &escape_string($2);
             xprint(2, "ab: $abbrev -> $value ($doc);\n");
             push(@{ $data{"abbrev-$secmap[$sec]"} }, "\\command\{$abbrev\}\{\\kbd\{$value" . ($doc ne '' ? "\}\\quad $doc" : "\}") . "\}");
         } else {
-            return 0;
+            xprint(0, "Line didn't look like abbreviation in abbreviations section: " . $input[$ln] . "\n");
         }
         $ln++;
     }
