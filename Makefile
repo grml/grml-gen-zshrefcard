@@ -11,5 +11,5 @@ clean:
 
 test: grml-zsh-refcard.tex
 	make -f ../grml-gen-zshrefcard/Makefile
-	latex grml-zsh-refcard.tex
-	latex grml-zsh-refcard.tex
+	pdflatex grml-zsh-refcard.tex
+	pdflatex grml-zsh-refcard.tex

@@ -47,40 +47,20 @@
 %%% }}}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%% PDF {{{
-\newif\ifpdf
-  \ifx\pdfoutput\undefined
-    \pdffalse
-  \else
-    \pdfoutput=1
-    \pdftrue
-  \fi
-
-\ifpdfoutput{
-  \usepackage[pdftex]{graphicx}
-  \DeclareGraphicsExtensions{.pdf}
-  \pdfcompresslevel=9
-  \usepackage[%
-    pdftex=true,
-    backref=true,
-    colorlinks=true,
-    bookmarks=true,
-    breaklinks=true,
-    linktocpage=true,
-    bookmarksopen=false,
-    bookmarksnumbered=false,
-    pdfpagemode=None
-  ]{hyperref}
-}{
-  \usepackage[dvips]{graphicx}
-  \DeclareGraphicsExtensions{.eps}
-  % \usepackage[%
-  %   dvips,
-  %   breaklinks=true,
-  %   colorlinks=false
-  % ]{hyperref}
-}
+\usepackage[pdftex]{graphicx}
+\DeclareGraphicsExtensions{.pdf}
+\pdfcompresslevel=9
+\usepackage[%
+  pdftex=true,
+  backref=true,
+  colorlinks=true,
+  bookmarks=true,
+  breaklinks=true,
+  linktocpage=true,
+  bookmarksopen=false,
+  bookmarksnumbered=false,
+  pdfpagemode=None
+]{hyperref}
 %%% }}}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
