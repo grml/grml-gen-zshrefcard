@@ -243,11 +243,6 @@ values:
 @@INSERT-variables@@
 \commandlistend
 
-\commandlistbegin
-\command{umask @@INSERT-other-umask@@}{new files automatically get permissions \kbd{@@INSERT-other-umaskstr@@}}
-\command{umask @@INSERT-other-r_umask@@}{new files for root user \kbd{@@INSERT-other-r_umaskstr@@}}
-\commandlistend
-
 \subsection*{Keybindings}
 
 Default keybinding mode is Emacs, i.e. you can use Emacs keybinds like
