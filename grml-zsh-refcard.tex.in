@@ -355,13 +355,6 @@ like this as well.
 
 \subsection*{Functions for user (grml)}
 
-\textbf{Searching}
-
-\commandlistbegin
-@@INSERT-functions-search@@
-\commandlistend
-
-\vspace{12pt}
 \textbf{Shortcuts}
 
 \commandlistbegin
