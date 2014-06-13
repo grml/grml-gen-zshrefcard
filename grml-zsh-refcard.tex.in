@@ -336,7 +336,7 @@ the expansion is '\texttt{C-x\,.}'.
 Example:
 
 \commandlistbegin
-\kbd{co}\textbf{<C-x> .} \quad expands to: \kbd{./configure \&\& make \&\& sudo make install}
+\kbd{co}\textbf{<C-x\,.>} \quad expands to: \kbd{./configure \&\& make \&\& sudo make install}
 \commandlistend
 
 The configuration of this feature and its implementation are described on the zsh wiki
