@@ -331,12 +331,12 @@ Please note: if not executed as root, these aliases try to run the command via s
 
 As of version 0.9, grml does not enable global aliases anymore. Instead, a
 feature similiar to vim's 'iab' was added. The default key-sequence to trigger
-the expansion is ',.'.
+the expansion is '\texttt{C-x\,.}'.
 
 Example:
 
 \commandlistbegin
-\kbd{co}\begin{Huge},.\end{Huge} \quad expands to: \kbd{./configure \&\& make \&\& sudo make install}
+\kbd{co}\textbf{<C-x> .} \quad expands to: \kbd{./configure \&\& make \&\& sudo make install}
 \commandlistend
 
 The configuration of this feature and its implementation are described on the zsh wiki
