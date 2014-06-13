@@ -364,6 +364,25 @@ sub __keybinding { #{{{
        #xprint(0, "!-> DEBUG: kbd: $kbd - value: $value - desc: $desc\n");
 
         push(@{ $data{"keybindings-$secmap[$sec]"} }, "\\command\{$kbd\}\{$desc\}");
+    } elsif ($input[$ln] =~ m!^.*bind2maps\s+([^-])+--\s+(.*)!) {
+        my ($maps, $rest) = ($1, $2);
+        my (@a) = split /\s+/, $rest, 2;
+        if ($a[0] ne q{-s}) {
+            push(@{ $data{"keybindings-$secmap[$sec]"} },
+                 "\\command\{$a[0]\}\{$desc\}");
+            return 1;
+        }
+        my $seq;
+        $rest = $a[1];
+        if ($rest =~ m!^'([^']+)'\s+!) {
+            $seq = $1;
+        } elsif ($rest =~ m!^"([^"]+)"\s+!) {
+            $seq = $1;
+        } else {
+            $seq = $rest;
+        }
+        $seq = demystify_keys($seq);
+        push(@{ $data{"keybindings-$secmap[$sec]"} }, "\\command\{$seq\}\{$desc\}");
     } else {
         return 0;
     }
