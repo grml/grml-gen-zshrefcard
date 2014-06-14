@@ -112,13 +112,13 @@
 %%% Seitenkopf- und -Fuﬂzeilen {{{
  \automark[subsection*]{section} % \left- und \rightmark bekommen Inhalt
 %%% Oben: Links, Mitte, Rechts
- \ihead[]{{\Huge GRML-Zsh-Refcard}}
+ \ihead[]{{\Huge Grml-Zsh-Refcard}}
  \chead[]{}
  \ohead[]{Generated: \today}
 %%% Unten: Links, Mitte, Rechts
- \ifoot[]{\vspace{-3pt}GRML-Zsh-Refcard}
+ \ifoot[]{\vspace{-3pt}Grml-Zsh-Refcard}
  \cfoot[]{}
- \ofoot[]{\vspace{-3pt}\copyright 2005-2013 \href{mailto:julius@grml.org}{Julius Plenz},
+ \ofoot[]{\vspace{-3pt}\copyright 2005-2014 \href{mailto:julius@grml.org}{Julius Plenz},
  \href{mailto:mika@grml.org}{Michael Prokop} and
  \href{mailto:ft@grml.org}{Frank Terbeck}}
 %%% }}}
@@ -191,7 +191,7 @@
 %%% Inhalt {{{
 
 %Schon in lhead
-%\section{GRML's Zsh-Setup Reference Card}
+%\section{Grml's Zsh-Setup Reference Card}
 
 \subsection*{Configuration files}
 
