@@ -53,7 +53,7 @@
 % \usepackage{eurosym}              % Euro-Symbol
 
 %%% Layout
-\usepackage{scrpage2}               % KOMA-‹berschriften und -Fuﬂzeilen.
+\usepackage{scrlayer-scrpage}       % KOMA-‹berschriften und -Fuﬂzeilen.
 %%% }}}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -110,7 +110,7 @@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Seitenkopf- und -Fuﬂzeilen {{{
- \automark[subsection*]{section} % \left- und \rightmark bekommen Inhalt
+ \automark[subsection]{section} % \left- und \rightmark bekommen Inhalt
 %%% Oben: Links, Mitte, Rechts
  \ihead[]{{\Huge Grml-Zsh-Refcard}}
  \chead[]{}
